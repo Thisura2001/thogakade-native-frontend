@@ -81,7 +81,6 @@ const customerSlice = createSlice({
                 const customer =state.find((customer:ICustomer)=> customer.id === action.payload.id);
                 if (customer){
                     customer.name = action.payload.name;
-                    customer.nic = action.payload.nic;
                     customer.email = action.payload.email;
                     customer.phone = action.payload.phone
                 }

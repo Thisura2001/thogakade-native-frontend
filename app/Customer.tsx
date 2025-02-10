@@ -24,7 +24,7 @@ import {TextInput, Button, Card, DataTable} from "react-native-paper";
     }, [dispatch, customers.length]);
 
     function handleAdd() {
-        const newCustomer = new ICustomer(id, name, nic, email, phone);
+        const newCustomer = new ICustomer(id, name, email, phone);
         dispatch(saveCustomer(newCustomer));
         resetForm();
     }
@@ -32,14 +32,13 @@ import {TextInput, Button, Card, DataTable} from "react-native-paper";
     const handleEdit = (customer:ICustomer) => {
         setId(customer.id);
         setName(customer.name);
-        setNic(customer.nic);
         setEmail(customer.email);
         setPhone(customer.phone);
         setIsEditing(true);
     };
 
     const handleUpdate = () => {
-        const updatedCustomer = new ICustomer(id, name, nic, email, phone);
+        const updatedCustomer = new ICustomer(id, name, email, phone);
         dispatch(updateCustomer(updatedCustomer));
         resetForm();
     };
@@ -61,20 +60,9 @@ import {TextInput, Button, Card, DataTable} from "react-native-paper";
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Customer Management</Text>
-
-            <TextInput label="Customer ID"
-                 value={id}
-                 onChangeText={setId}
-                 style={styles.input}
-              />
             <TextInput label="Name"
                 value={name}
                 onChangeText={setName}
-                style={styles.input}
-            />
-            <TextInput label="NIC"
-                value={nic}
-                onChangeText={setNic}
                 style={styles.input}
             />
             <TextInput label="Email"
@@ -108,31 +96,29 @@ import {TextInput, Button, Card, DataTable} from "react-native-paper";
             <Button mode="contained" onPress={handleDelete} style={[styles.button, styles.deleteButton]}>
                 Delete Customer
             </Button>
-
-            <DataTable>
-                <DataTable.Header>
-                    <DataTable.Title> Name</DataTable.Title>
-                    <DataTable.Title> NIC</DataTable.Title>
-                    <DataTable.Title> Email</DataTable.Title>
-                    <DataTable.Title> Phone</DataTable.Title>
-                </DataTable.Header>
-                <FlatList
-                    data={customers}
-                    keyExtractor={(item) => item.id}
-                    renderItem={({ item }) => (
-                        <TouchableOpacity onPress={() => handleEdit(item)}>
-                            <Card style={styles.card}>
-                                <Card.Content>
-                                    <Text style={styles.cardTitle}>{item.name}</Text>
-                                    <Text style={styles.cardText}>NIC: {item.nic}</Text>
-                                    <Text style={styles.cardText}>Email: {item.email}</Text>
-                                    <Text style={styles.cardText}>Phone: {item.phone}</Text>
-                                </Card.Content>
-                            </Card>
-                        </TouchableOpacity>
-                    )}
-                />
-            </DataTable>
+            <View style={styles.tableContainer}>
+                <DataTable>
+                    <DataTable.Header style={styles.tableHeader}>
+                        <DataTable.Title> Name</DataTable.Title>
+                        <DataTable.Title> Email</DataTable.Title>
+                        <DataTable.Title> Phone</DataTable.Title>
+                    </DataTable.Header>
+                    <FlatList
+                        data={customers}
+                        keyExtractor={(item) => item.id}
+                        renderItem={({ item }) => (
+                                <DataTable.Row style={styles.tableRow}>
+                                    <DataTable.Cell>{item.name}</DataTable.Cell>
+                                    <DataTable.Cell>{item.email}</DataTable.Cell>
+                                    <DataTable.Cell>{item.phone}</DataTable.Cell>
+                                    <DataTable.Cell>
+                                        <Button onPress={() => handleEdit(item)}>Edit</Button>
+                                    </DataTable.Cell>
+                                </DataTable.Row>
+                        )}
+                    />
+                </DataTable>
+            </View>
         </View>
     );
 }
@@ -174,6 +160,28 @@ const styles = StyleSheet.create({
     cardText: {
         fontSize: 14,
         color: "#555",
+    },
+    tableContainer: {
+        backgroundColor: "#fff",
+        borderRadius: 8,
+        elevation: 2,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        padding: 8,
+        marginTop: 20,
+    },
+    tableHeader: {
+        backgroundColor: "#0e0c0c",
+        borderTopLeftRadius: 8,
+        borderTopRightRadius: 8,
+        paddingVertical: 2,
+    },
+    tableRow: {
+        backgroundColor: "#515cb4",
+        borderBottomWidth: 1,
+        borderBottomColor: "#ddd",
     },
 });
 export default Customer;

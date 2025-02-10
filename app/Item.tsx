@@ -1,10 +1,10 @@
-import {StyleSheet, Text, View} from "react-native";
+import {FlatList, StyleSheet, Text, View} from "react-native";
 import IItem from "../Model/IItem";
 import {deleteItem, getAllItems, saveItem, updateItem} from "../Reducers/ItemSlice";
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch} from "../Store/Store";
-import {Button, TextInput} from "react-native-paper";
+import {Button, DataTable, TextInput} from "react-native-paper";
 
 function Item(){
     const [id, setItemId] = useState("")
@@ -23,7 +23,7 @@ function Item(){
     }, [dispatch,items.length]);
 
     const handleAdd = () => {
-        const newItem = new IItem(id,name,quantity,price)
+        const newItem = new IItem(id,name,price,quantity)
         dispatch(saveItem(newItem))
         resetForm()
     }
@@ -37,7 +37,7 @@ function Item(){
     }
 
     const handleUpdate = () => {
-        const updated = new IItem(id,name,quantity,price)
+        const updated = new IItem(id,name,price,quantity)
         dispatch(updateItem(updated))
         resetForm()
     }
@@ -58,11 +58,6 @@ function Item(){
         <View style={styles.container}>
             <Text style={styles.title}>Item Manage</Text>
 
-            <TextInput label="Item ID"
-                       value={id}
-                       onChangeText={setItemId}
-                       style={styles.input}
-            />
             <TextInput label="Item Name"
                        value={name}
                        onChangeText={setName}
@@ -97,6 +92,30 @@ function Item(){
             <Button mode="contained" onPress={handleDelete} style={[styles.button, styles.deleteButton]}>
                 Delete Item
             </Button>
+
+            <View style={styles.tableContainer}>
+                <DataTable style={styles.tableHeader}>
+                    <DataTable.Header>
+                        <DataTable.Title> Name</DataTable.Title>
+                        <DataTable.Title> Quantity</DataTable.Title>
+                        <DataTable.Title> Price</DataTable.Title>
+                    </DataTable.Header>
+                    <FlatList
+                        data={items}
+                        keyExtractor={(item) => item.id}
+                        renderItem={({ item }) => (
+                            <DataTable.Row style={styles.tableRow}>
+                                <DataTable.Cell>{item.name}</DataTable.Cell>
+                                <DataTable.Cell>{item.quantity}</DataTable.Cell>
+                                <DataTable.Cell>{item.price}</DataTable.Cell>
+                                <DataTable.Cell>
+                                    <Button onPress={() => handleEdit(item)}>Edit</Button>
+                                </DataTable.Cell>
+                            </DataTable.Row>
+                        )}
+                    />
+                </DataTable>
+            </View>
         </View>
     )
 }
@@ -137,6 +156,28 @@ const styles = StyleSheet.create({
     cardText: {
         fontSize: 14,
         color: "#555",
+    },
+    tableContainer: {
+        backgroundColor: "#fff",
+        borderRadius: 8,
+        elevation: 2,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        padding: 8,
+        marginTop: 20,
+    },
+    tableHeader: {
+        backgroundColor: "#0e0c0c",
+        borderTopLeftRadius: 8,
+        borderTopRightRadius: 8,
+        paddingVertical: 2,
+    },
+    tableRow: {
+        backgroundColor: "#515cb4",
+        borderBottomWidth: 1,
+        borderBottomColor: "#ddd",
     },
 });
 export default Item;

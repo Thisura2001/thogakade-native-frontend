@@ -20,9 +20,9 @@ export const saveItem = createAsyncThunk(
 )
 export const deleteItem = createAsyncThunk(
     'items/deleteItem',
-    async (id:string)=>{
+    async (name:string)=>{
         try {
-            const response = await api.delete(`/delete/${id}`)
+            const response = await api.delete(`/delete/${name}`)
             return response.data;
         }catch (e){
             console.log("Error deleting item ",e)
@@ -33,7 +33,7 @@ export const updateItem = createAsyncThunk(
     'items/updateItem',
     async (item:IItem)=>{
         try {
-            const response = await api.put(`/update/${item.id}`,item);
+            const response = await api.put(`/update/${item.name}`,item);
             return response.data;
         }catch (e){
             console.log("Error updating item ",e)
@@ -68,7 +68,7 @@ const itemSlice = createSlice({
             })
         builder
             .addCase(deleteItem.fulfilled,(state,action)=>{
-                return state.filter((item:IItem)=>item.id !== action.payload.id)
+                return state.filter((item:IItem)=>item.id !== action.payload.name)
             })
             .addCase(deleteItem.rejected, (_, action) => {
                 console.error(action.payload);
@@ -78,7 +78,7 @@ const itemSlice = createSlice({
             })
         builder
             .addCase(updateItem.fulfilled,(state,action)=>{
-                const item = state.find((item:IItem)=>item.id === action.payload.id);
+                const item = state.find((item:IItem)=>item.name === action.payload.name);
                 if (item){
                     item.id = action.payload.id;
                     item.name = action.payload.name;
