@@ -62,14 +62,12 @@ import { TextInput, Button, Card } from "react-native-paper";
         <View style={styles.container}>
             <Text style={styles.title}>Customer Management</Text>
 
-            {/* Form Inputs */}
             <TextInput label="Customer ID" value={id} onChangeText={setId} style={styles.input} />
             <TextInput label="Name" value={name} onChangeText={setName} style={styles.input} />
             <TextInput label="NIC" value={nic} onChangeText={setNic} style={styles.input} />
             <TextInput label="Email" value={email} onChangeText={setEmail} keyboardType="email-address" style={styles.input} />
             <TextInput label="Phone" value={phone} onChangeText={setPhone} keyboardType="phone-pad" style={styles.input} />
 
-            {/* Action Buttons */}
             {isEditing ? (
                 <View style={styles.buttonContainer}>
                     <Button mode="contained" onPress={handleUpdate} style={styles.button}>
@@ -89,7 +87,6 @@ import { TextInput, Button, Card } from "react-native-paper";
                 Delete Customer
             </Button>
 
-            {/* Customer List */}
             <FlatList
                 data={customers}
                 keyExtractor={(item) => item.id}
