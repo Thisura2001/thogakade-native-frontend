@@ -1,4 +1,4 @@
-export default class Item{
+export default class IItem {
     id:string
     name:string
     price:string

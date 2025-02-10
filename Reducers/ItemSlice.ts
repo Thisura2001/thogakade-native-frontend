@@ -1,15 +1,15 @@
 import axios from "axios";
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import Item from "../Model/Item";
+import IItem from "../Model/IItem";
 
-const initialState:Item[] = [];
+const initialState:IItem[] = [];
 
 const api = axios.create({
     baseURL: 'http://localhost:3000/items',
 });
 export const saveItem = createAsyncThunk(
     'items/saveItem',
-    async (item:Item)=>{
+    async (item:IItem)=>{
         try {
             const response = await api.post('/add',item);
             return response.data;
@@ -31,7 +31,7 @@ export const deleteItem = createAsyncThunk(
 )
 export const updateItem = createAsyncThunk(
     'items/updateItem',
-    async (item:Item)=>{
+    async (item:IItem)=>{
         try {
             const response = await api.put(`/update/${item.id}`,item);
             return response.data;
@@ -68,7 +68,7 @@ const itemSlice = createSlice({
             })
         builder
             .addCase(deleteItem.fulfilled,(state,action)=>{
-                return state.filter((item:Item)=>item.id !== action.payload.id)
+                return state.filter((item:IItem)=>item.id !== action.payload.id)
             })
             .addCase(deleteItem.rejected, (_, action) => {
                 console.error(action.payload);
@@ -78,7 +78,7 @@ const itemSlice = createSlice({
             })
         builder
             .addCase(updateItem.fulfilled,(state,action)=>{
-                const item = state.find((item:Item)=>item.id === action.payload.id);
+                const item = state.find((item:IItem)=>item.id === action.payload.id);
                 if (item){
                     item.id = action.payload.id;
                     item.name = action.payload.name;

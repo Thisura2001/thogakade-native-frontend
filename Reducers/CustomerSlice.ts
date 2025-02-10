@@ -1,15 +1,15 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import axios from "axios";
-import Customer from "../Model/Customer";
+import ICustomer from "../Model/./ICustomer";
 
-const initialState:Customer[] = [];
+const initialState:ICustomer[] = [];
 
 const api =axios.create({
     baseURL: 'http://localhost:3000/customers',
 })
 export const saveCustomer = createAsyncThunk(
     'customers/saveCustomer',
-    async (customer:Customer)=>{
+    async (customer:ICustomer)=>{
         try {
             const response =await api.post('/add',customer)
             return response.data;
@@ -31,7 +31,7 @@ export const deleteCustomer = createAsyncThunk(
 )
 export const updateCustomer = createAsyncThunk(
     'customers/updateCustomer',
-    async (customer:Customer)=>{
+    async (customer:ICustomer)=>{
         try {
             const response = await api.put(`/update/${customer.id}`,customer);
             return response.data;
@@ -61,24 +61,24 @@ const customerSlice = createSlice({
                 state.push(action.payload);
         })
             .addCase(saveCustomer.rejected,(_, action)=>{
-                console.log("failed to save Customer ",action.payload);
+                console.log("failed to save ICustomer ",action.payload);
             })
             .addCase(saveCustomer.pending,(_,action)=>{
                 console.log("Pending adding customer ",action.payload);
             })
         builder
             .addCase(deleteCustomer.fulfilled,(state,action)=>{
-                return state.filter((customer:Customer)=>customer.id!== action.payload.id);
+                return state.filter((customer:ICustomer)=>customer.id!== action.payload.id);
             })
             .addCase(deleteCustomer.rejected,(_,action)=>{
                 console.log("Fail to save customer ",action.payload);
             })
             .addCase(deleteCustomer.pending,(_,action)=> {
-                console.log("Pending Deleting Customer", action.payload);
+                console.log("Pending Deleting ICustomer", action.payload);
             })
         builder
             .addCase(updateCustomer.fulfilled,(state,action)=>{
-                const customer =state.find((customer:Customer)=> customer.id === action.payload.id);
+                const customer =state.find((customer:ICustomer)=> customer.id === action.payload.id);
                 if (customer){
                     customer.name = action.payload.name;
                     customer.nic = action.payload.nic;
@@ -90,11 +90,11 @@ const customerSlice = createSlice({
                 console.log("Fail to save customer ",action.payload);
             })
             .addCase(updateCustomer.pending,(_,action)=>{
-                console.log("Pending Updating Customer ",action.payload);
+                console.log("Pending Updating ICustomer ",action.payload);
             })
         builder
             .addCase(getAllCustomers.fulfilled,(state,action)=>{
-                action.payload.map((customer:Customer)=>{
+                action.payload.map((customer:ICustomer)=>{
                     state.push(customer)
                 })
             })
@@ -102,7 +102,7 @@ const customerSlice = createSlice({
                 console.log("Fail to save customer ",action.payload);
             })
             .addCase(getAllCustomers.pending,(state,action)=>{
-                console.log("Pending Updating Customer ",action.payload);
+                console.log("Pending Updating ICustomer ",action.payload);
             })
     }
 })

@@ -1,4 +1,4 @@
-export default class Customer {
+export default class ICustomer {
     id:string;
     name:string;
     nic:string;
