@@ -20,9 +20,9 @@ export const saveCustomer = createAsyncThunk(
 )
 export const deleteCustomer = createAsyncThunk(
     'customers/deleteCustomer',
-    async (id:string)=>{
+    async (email:string)=>{
         try {
-            const response =await api.delete(`/delete/${id}`)
+            const response =await api.delete(`/delete/${email}`)
             return response.data;
         }catch (err){
             console.log("Error deleting customer ",err);
@@ -33,7 +33,7 @@ export const updateCustomer = createAsyncThunk(
     'customers/updateCustomer',
     async (customer:ICustomer)=>{
         try {
-            const response = await api.put(`/update/${customer.id}`,customer);
+            const response = await api.put(`/update/${customer.email}`,customer);
             return response.data;
         }catch (err){
             console.log("Error updating customer ",err);
@@ -68,7 +68,7 @@ const customerSlice = createSlice({
             })
         builder
             .addCase(deleteCustomer.fulfilled,(state,action)=>{
-                return state.filter((customer:ICustomer)=>customer.id!== action.payload.id);
+                return state.filter((customer:ICustomer)=>customer.email!== action.payload.email);
             })
             .addCase(deleteCustomer.rejected,(_,action)=>{
                 console.log("Fail to save customer ",action.payload);
@@ -78,7 +78,7 @@ const customerSlice = createSlice({
             })
         builder
             .addCase(updateCustomer.fulfilled,(state,action)=>{
-                const customer =state.find((customer:ICustomer)=> customer.id === action.payload.id);
+                const customer =state.find((customer:ICustomer)=> customer.email === action.payload.email);
                 if (customer){
                     customer.name = action.payload.name;
                     customer.email = action.payload.email;
