@@ -4,7 +4,7 @@ import { deleteCustomer, getAllCustomers, saveCustomer, updateCustomer } from ".
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../Store/Store";
-import { TextInput, Button, Card } from "react-native-paper";
+import {TextInput, Button, Card, DataTable} from "react-native-paper";
 
  function Customer() {
     const [id, setId] = useState("");
@@ -62,11 +62,33 @@ import { TextInput, Button, Card } from "react-native-paper";
         <View style={styles.container}>
             <Text style={styles.title}>Customer Management</Text>
 
-            <TextInput label="Customer ID" value={id} onChangeText={setId} style={styles.input} />
-            <TextInput label="Name" value={name} onChangeText={setName} style={styles.input} />
-            <TextInput label="NIC" value={nic} onChangeText={setNic} style={styles.input} />
-            <TextInput label="Email" value={email} onChangeText={setEmail} keyboardType="email-address" style={styles.input} />
-            <TextInput label="Phone" value={phone} onChangeText={setPhone} keyboardType="phone-pad" style={styles.input} />
+            <TextInput label="Customer ID"
+                 value={id}
+                 onChangeText={setId}
+                 style={styles.input}
+              />
+            <TextInput label="Name"
+                value={name}
+                onChangeText={setName}
+                style={styles.input}
+            />
+            <TextInput label="NIC"
+                value={nic}
+                onChangeText={setNic}
+                style={styles.input}
+            />
+            <TextInput label="Email"
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+                style={styles.input}
+            />
+            <TextInput label="Phone"
+                value={phone}
+                onChangeText={setPhone}
+                keyboardType="phone-pad"
+                style={styles.input}
+            />
 
             {isEditing ? (
                 <View style={styles.buttonContainer}>
@@ -87,22 +109,30 @@ import { TextInput, Button, Card } from "react-native-paper";
                 Delete Customer
             </Button>
 
-            <FlatList
-                data={customers}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) => (
-                    <TouchableOpacity onPress={() => handleEdit(item)}>
-                        <Card style={styles.card}>
-                            <Card.Content>
-                                <Text style={styles.cardTitle}>{item.name}</Text>
-                                <Text style={styles.cardText}>NIC: {item.nic}</Text>
-                                <Text style={styles.cardText}>Email: {item.email}</Text>
-                                <Text style={styles.cardText}>Phone: {item.phone}</Text>
-                            </Card.Content>
-                        </Card>
-                    </TouchableOpacity>
-                )}
-            />
+            <DataTable>
+                <DataTable.Header>
+                    <DataTable.Title> Name</DataTable.Title>
+                    <DataTable.Title> NIC</DataTable.Title>
+                    <DataTable.Title> Email</DataTable.Title>
+                    <DataTable.Title> Phone</DataTable.Title>
+                </DataTable.Header>
+                <FlatList
+                    data={customers}
+                    keyExtractor={(item) => item.id}
+                    renderItem={({ item }) => (
+                        <TouchableOpacity onPress={() => handleEdit(item)}>
+                            <Card style={styles.card}>
+                                <Card.Content>
+                                    <Text style={styles.cardTitle}>{item.name}</Text>
+                                    <Text style={styles.cardText}>NIC: {item.nic}</Text>
+                                    <Text style={styles.cardText}>Email: {item.email}</Text>
+                                    <Text style={styles.cardText}>Phone: {item.phone}</Text>
+                                </Card.Content>
+                            </Card>
+                        </TouchableOpacity>
+                    )}
+                />
+            </DataTable>
         </View>
     );
 }

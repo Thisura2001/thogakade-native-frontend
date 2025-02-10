@@ -4,8 +4,9 @@ import {deleteItem, getAllItems, saveItem, updateItem} from "../Reducers/ItemSli
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch} from "../Store/Store";
+import {Button, TextInput} from "react-native-paper";
 
-export default function Item(){
+function Item(){
     const [id, setItemId] = useState("")
     const [name, setName] = useState("")
     const [quantity, setQuantity] = useState("")
@@ -54,15 +55,88 @@ export default function Item(){
     }
 
     return(
-        <View style={style.container}>
-            <Text>Item Manage</Text>
+        <View style={styles.container}>
+            <Text style={styles.title}>Item Manage</Text>
+
+            <TextInput label="Item ID"
+                       value={id}
+                       onChangeText={setItemId}
+                       style={styles.input}
+            />
+            <TextInput label="Item Name"
+                       value={name}
+                       onChangeText={setName}
+                       style={styles.input}
+            />
+            <TextInput label="Item Quantity"
+                       value={quantity}
+                       onChangeText={setQuantity}
+                       style={styles.input}
+            />
+            <TextInput label="Item Price"
+                       value={price}
+                       onChangeText={setPrice}
+                       style={styles.input}
+            />
+
+            {isEditing ? (
+                <View style={styles.buttonContainer}>
+                    <Button mode="contained" onPress={handleUpdate} style={styles.button}>
+                        Update
+                    </Button>
+                    <Button mode="contained" onPress={resetForm} style={styles.button} buttonColor="gray">
+                        Cancel
+                    </Button>
+                </View>
+            ) : (
+                <Button mode="contained" onPress={handleAdd} style={styles.button}>
+                    Add Item
+                </Button>
+            )}
+
+            <Button mode="contained" onPress={handleDelete} style={[styles.button, styles.deleteButton]}>
+                Delete Item
+            </Button>
         </View>
     )
 }
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
+        padding: 16,
+        backgroundColor: "#fff",
+    },
+    title: {
+        fontSize: 24,
+        fontWeight: "bold",
+        textAlign: "center",
+        marginBottom: 20,
+        color: "#4A90E2",
+    },
+    input: {
+        marginBottom: 10,
+    },
+    buttonContainer: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+    },
+    button: {
+        marginTop: 10,
+    },
+    deleteButton: {
+        backgroundColor: "red",
+    },
+    card: {
+        marginVertical: 8,
+        backgroundColor: "#f8f9fa",
+    },
+    cardTitle: {
+        fontSize: 18,
+        fontWeight: "bold",
+    },
+    cardText: {
+        fontSize: 14,
+        color: "#555",
     },
 });
+export default Item;
